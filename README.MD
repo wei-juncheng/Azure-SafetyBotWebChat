@@ -1,5 +1,6 @@
 # 確保Azure Bot Service在網頁聊天中的安全性
 
+![](https://i.imgur.com/Nwf1sFu.png)
 - Azure Bot Service提供直接在HTML網頁上使用JavaScript與Bot交談的Web Chat通道，讓對話機器人可以被廣泛應用在許多企業官網甚至是企業內部網站，例如：IT支援、合約查詢、部門文件查詢等等的用途，但是提到企業內部系統就需要特別注意資安問題，避免公司內部資料被外部人員惡意存取或偷竊。
 - 本文將會示範如何使用Bot Service中的Web Chat模式在HTML網頁中建立一個聊天室，並且使用Token交換機制 搭配 IP限制功能，兩層防護避免企業資料被外人存取。
 ## 架構說明：
