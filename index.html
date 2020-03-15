@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <title>Web Chat: Full-featured bundle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
+    <style>
+        html,
+        body {
+            height: 100%;
+            background-color: gray;
+        }
+        
+        body {
+            margin: 0;
+        }
+        
+        #webchat {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="webchat" role="main"></div>
+    <script>
+        (async function() {
+
+            //此端點為自行建立的Azure Function，使用者可以透過呼叫這個API取得一組Bot Token
+            //請將先前用Azure Function建置好Bot Token Exchange API的Endpoint URL複製貼上以取代*符號
+            const res = await fetch('***********************************************', {
+                method: 'GET'
+            });
+            const {
+                token
+            } = await res.json();
+
+            //註冊觸發事件，讓Bot主動傳送歡迎訊息
+            const store = window.WebChat.createStore({}, ({
+                dispatch
+            }) => next => action => {
+                if (action.type === 'DIRECT_LINE/CONNECT_FULFILLED') {
+                    dispatch({
+                        type: 'WEB_CHAT/SEND_EVENT',
+                        payload: {
+                            name: 'webchat/join',
+                            value: {
+                                language: window.navigator.language
+                            }
+                        }
+                    });
+                }
+                return next(action);
+            });
+
+            window.WebChat.renderWebChat({
+                    directLine: window.WebChat.createDirectLine({
+                        token
+                    }),
+                    store
+                },
+                document.getElementById('webchat')
+            );
+            document.querySelector('#webchat > *').focus();
+        })().catch(err => console.error(err));
+    </script>
+</body>
+
+</html>
